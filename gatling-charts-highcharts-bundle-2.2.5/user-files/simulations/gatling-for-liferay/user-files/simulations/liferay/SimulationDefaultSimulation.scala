@@ -33,7 +33,8 @@ class DefaultSimulation extends Simulation {
 
 
   setUp(
-    DefaultScenario.inject(rampUsers(100) over(60 seconds))
+    DefaultScenario.inject(rampUsers(1000) over(60 seconds))
+     //DefaultScenario.inject(atOnceUsers(8000))
   ).protocols(httpProtocol)
 
 }
