@@ -12,7 +12,7 @@ import scala.concurrent.duration._
 class DefaultSimulation extends Simulation {
 
   val httpProtocol = http
-    .baseURL("http://extranet.dev.gal.local")
+    .baseURL("http://extranet.qa.gal.local")
     .acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
     .acceptEncodingHeader("gzip, deflate")
     .acceptLanguageHeader("fr,fr-fr;q=0.8,en-us;q=0.5,en;q=0.3")
@@ -26,15 +26,22 @@ class DefaultSimulation extends Simulation {
     .exec(
       Login.successfulLogin("/login", "data/feeders/User_default_login_.csv"),
       SiteMapRandom.run(),
-      pause(3),
-      SiteMapRandom.run(),
+      //pause(3),
+      //SiteMapRandom.run(),
       Logout.logout()
     )
 
+  val HomePageScenario = scenario("HomePageScenario") 
+     .exec(
+      Login.successfulLogin("/login", "data/feeders/User_default_login_.csv"),
+      Accueil.run()
+    )
+        
 
   setUp(
-    DefaultScenario.inject(rampUsers(1000) over(60 seconds))
+    //DefaultScenario.inject(rampUsers(6000) over(60 seconds))
      //DefaultScenario.inject(atOnceUsers(8000))
+     HomePageScenario.inject(rampUsers(600) over(60 seconds))
   ).protocols(httpProtocol)
 
 }
